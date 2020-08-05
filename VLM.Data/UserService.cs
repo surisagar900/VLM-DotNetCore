@@ -41,19 +41,39 @@ namespace VLM.Data
             string ErrorCode = "";
             if(req.Role == "User")
             {
-                Users user = await dbContext.Users.SingleOrDefaultAsync(x => x.UserName == req.Username);
-                if(user == null) return ErrorCode = "USERNAME_NOT_FOUND";
-                if(user.Password != req.Password) return ErrorCode = "INCORRECT_PASSWORD";
+                Users user = await dbContext.Users.SingleOrDefaultAsync(x => x.UserName == req.Username && x.Password == req.Password);
+                if(user == null) return ErrorCode = "INVALID_CREDENTIALS";
+                //Users user = await dbContext.Users.SingleOrDefaultAsync(x => x.UserName == req.Username);
+                //if(user.Password != req.Password) return ErrorCode = "INCORRECT_PASSWORD";
             }
             if(req.Role == "Admin")
             {
-                Admin admin = await dbContext.Admin.SingleOrDefaultAsync(x => x.UserName == req.Username);
-                if(admin == null) return ErrorCode = "USERNAME_NOT_FOUND";
-                if(admin.Password != req.Password) return ErrorCode = "INCORRECT_PASSWORD";
+                Admin admin = await dbContext.Admin.SingleOrDefaultAsync(x => x.UserName == req.Username && x.Password == req.Password);
+                if(admin == null) return ErrorCode = "INVALID_CREDENTIALS";
+                //if(admin.Password != req.Password) return ErrorCode = "INCORRECT_PASSWORD";
             }
             ErrorCode = "SUCCESS";
             return ErrorCode;
         }
+
+        //public async Task<string> CheckUserCredentials(AuthRequest req)
+        //{
+        //    string ErrorCode = "";
+        //    if(req.Role == "User")
+        //    {
+        //        Users user = await dbContext.Users.SingleOrDefaultAsync(x => x.UserName == req.Username);
+        //        if(user == null) return ErrorCode = "USERNAME_NOT_FOUND";
+        //        if(user.Password != req.Password) return ErrorCode = "INCORRECT_PASSWORD";
+        //    }
+        //    if(req.Role == "Admin")
+        //    {
+        //        Admin admin = await dbContext.Admin.SingleOrDefaultAsync(x => x.UserName == req.Username);
+        //        if(admin == null) return ErrorCode = "USERNAME_NOT_FOUND";
+        //        if(admin.Password != req.Password) return ErrorCode = "INCORRECT_PASSWORD";
+        //    }
+        //    ErrorCode = "SUCCESS";
+        //    return ErrorCode;
+        //}
 
 
         public async Task<AuthResponse> AuthenticateAsync(AuthRequest req)
